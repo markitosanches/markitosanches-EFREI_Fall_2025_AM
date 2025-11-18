@@ -12,3 +12,82 @@ exports.findAll = (req, res) => {
         })
     })
 }
+
+exports.create = (req, res) => {
+    // console.log(req.body)
+    if(!req.body.name){
+        res.status(400).send({
+            message: 'The name is mandatory'
+        })
+        return
+    }
+
+    Product.create(req.body)
+    .then(data => {
+        res.send(data)
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: 'Could not insert this data'
+        })
+    })
+}
+
+exports.findByPk = (req, res) => {
+    const id = req.params.id
+    Product.findByPk(id)
+    .then(data => {
+        res.send(data)
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: 'Could not insert this data'
+        })
+    })
+}
+
+exports.update = (req, res) => {
+    const id = req.params.id
+    Product.update(req.body, {
+        where: {id: id} 
+    })
+    .then(num => {
+        if(num == 1){
+            res.send({
+                message: 'Product updated'
+            })
+        }else{
+            res.send({
+                message: 'Product not fond'
+            })
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: 'Could not update this data'
+        })
+    })
+}
+
+exports.delete = (req, res) => {
+    const id = req.params.id
+    Product.destroy({
+        where: {id: id} 
+    })
+    .then(num => {
+        if(num == 1){
+            res.send({
+                message: 'Product deleted'
+            })
+        }else{
+            res.send({
+                message: 'Product not fond'
+            })
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: 'Could not delete this data'
+        })
+    })
+}
